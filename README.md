@@ -1,0 +1,1 @@
+### Web Chat App in MERN stack with Socket.io and JWT authentication
