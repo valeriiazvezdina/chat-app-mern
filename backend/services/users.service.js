@@ -9,7 +9,7 @@ class UsersService {
         return await User.find();
     }
 
-    async loggedInUserId(loggedInUserId) {
+    async loggedInUsersIds(loggedInUserId) {
         return await User.find({
             _id: { $ne: loggedInUserId }
         });

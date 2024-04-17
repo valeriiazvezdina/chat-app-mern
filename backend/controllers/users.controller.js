@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 const UsersService = require('../services/users.service');
 const generateTokenSetCookies = require('../utils/generateTokenSetCookies');
 
@@ -33,7 +34,7 @@ class UsersController {
     async getUsersExceptLoggedIn(req, res) {
         try {
             const loggedInUserId = req.userId;
-            const users = await UsersService.loggedInUserId(loggedInUserId);
+            const users = await UsersService.loggedInUsersIds(loggedInUserId);
             res.status(200).json(users);
         } catch(error) {
             console.log('Error in getting users for sidebar', error);
@@ -45,41 +46,33 @@ class UsersController {
 
     async signup(req, res) {
         try {
-            const { fullName, username, gender, password, confirmPassword } = req.body;
+            const result = validationResult(req);
+
+            if (result.isEmpty()) {
+                const { fullName, username, gender, password, confirmPassword } = req.body;
             
-            if (password !== confirmPassword) {
-                res.status(400).json({
-                    error: "Passwords do not match"
+                if (password !== confirmPassword) {
+                    res.status(400).json({
+                        error: "Passwords do not match"
+                    });
+                }
+
+                const saltRounds = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+                const newUser = await UsersService.createUser({
+                    fullName,
+                    username,
+                    password: hashedPassword,
+                    gender,
+                    profilePicture: selectProfilePicture(gender, username)
                 });
-            }
 
-            const user = this.findUserByUsername(user.username);
-
-            if (user) {
-                res.status(400).json({
-                    error: "User with such username already exists"
-                });
-            }
-
-            const saltRounds = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-            const newUser = await UsersService.createUser({
-                fullName,
-                username,
-                password: hashedPassword,
-                gender,
-                profilePicture: selectProfilePicture(gender, username)
-            });
-
-
-            if (newUser) {
                 generateTokenSetCookies(newUser._id, res);
-                await newUser.save();
                 res.status(201).json(newUser);
             } else {
-                res.status(400).json({
-                    error: "Invalid user data"
+                res.status(400).send({
+                    error: result.array()
                 });
             }
         } catch(error) {
@@ -92,21 +85,25 @@ class UsersController {
 
     async login(req, res) {
         try {
-            const { username, password } = req.body;
-            const user = await UsersService.findUserByUsername(username);
+            const result = validationResult(req);
 
-            if (!user) {
-                res.status(404).send('User with such email does not exist');
-            } else {
+            if (result.isEmpty()) {
+                const { username, password } = req.body;
+                const user = await UsersService.findUserByUsername(username);
+    
                 const validate = await bcrypt.compare(password, user.password);
                 
                 if (!validate) {
                     res.status(403).send('Wrong password');
                 } else {
                     generateTokenSetCookies(user._id, res);
-
+    
                     res.status(200).json(user);
                 }
+            } else {
+                res.status(400).send({
+                    error: result.array()
+                });
             }
         } catch(error) {
             console.log('Error in login', error);
