@@ -5,7 +5,7 @@
 @layer components {
 
     .sidebar-icon {
-        @apply relative flex items-center justify-center h-14 w-14 my-6 mx-auto shadow-lg bg-gray-500 text-white hover:bg-primary cursor-pointer rounded-3xl hover:rounded-xl transition-all;
+        @apply relative flex items-center justify-center h-14 w-14 my-6 mx-auto shadow-lg bg-white hover:bg-primary hover:text-white cursor-pointer rounded-3xl hover:rounded-xl transition-all;
     }
 
     .sidebar-tooltip {
