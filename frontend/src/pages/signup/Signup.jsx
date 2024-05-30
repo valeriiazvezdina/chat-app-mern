@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import GenderCheckbox from './GenderCheckbox.jsx';
 
 export default function Login() {
@@ -93,9 +94,9 @@ export default function Login() {
                     <GenderCheckbox />
                 </div>
                 <div className="flex justify-between mt-5">
-                    <a className="link link-hover text-gray-500">
+                    <Link to="/login" className="link link-hover text-gray-500">
                         Already have an account?
-                    </a>
+                    </Link>
                 </div>
 
                 <button className="btn w-full mt-3 bg-primary text-white">

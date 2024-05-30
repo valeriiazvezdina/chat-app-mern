@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Login() {
     return (
         <>
@@ -41,10 +43,15 @@ export default function Login() {
                     </label>
                 </div>
                 <div className="flex justify-between mt-3">
-                    <a className="link link-hover text-gray-500">Register</a>
-                    <a className="link link-hover text-gray-500">
+                    <Link
+                        to="/signup"
+                        className="link link-hover text-gray-500"
+                    >
+                        Register
+                    </Link>
+                    {/* <a className="link link-hover text-gray-500">
                         Forgot password?
-                    </a>
+                    </a> */}
                 </div>
                 <button className="btn w-full mt-3 bg-primary text-white">
                     Submit
