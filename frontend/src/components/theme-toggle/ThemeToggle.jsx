@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 
 export default function ThemeToggle() {
-    const [theme, setTheme] = useState('light');
+    const storage =
+        typeof window !== 'undefined' ? localStorage.theme : 'light';
+
+    const [theme, setTheme] = useState(storage);
+    const [storageTheme, setStorageTheme] = useState(storage);
 
     const toggleTheme = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -10,6 +14,11 @@ export default function ThemeToggle() {
     useEffect(() => {
         document.querySelector('html').setAttribute('data-theme', theme);
     }, [theme]);
+
+    useEffect(() => {
+        localStorage.setItem('theme', theme);
+        setStorageTheme(theme);
+    }, [storageTheme, theme]);
 
     return (
         <div className="ml-4 mb-3">
