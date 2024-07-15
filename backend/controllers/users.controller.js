@@ -8,8 +8,8 @@ function selectProfilePicture(gender, username) {
     const femaleProfilePicture = `https://avatar.iran.liara.run/public/girl?username=${username}`;
     const otherProfilePicture = `https://avatar.iran.liara.run/public`; // TODO: think about it
 
-    switch(gender) {
-        case 'male': 
+    switch (gender) {
+        case 'male':
             return maleProfilePicture;
         case 'female':
             return femaleProfilePicture;
@@ -23,7 +23,7 @@ class UsersController {
         try {
             const users = await UsersService.getUsers();
             res.status(200).json(users);
-        } catch(error) {
+        } catch (error) {
             console.log('Error in getting users', error);
             res.status(500).json({
                 error: 'Internal server error'
@@ -36,7 +36,7 @@ class UsersController {
             const loggedInUserId = req.userId;
             const users = await UsersService.loggedInUsersIds(loggedInUserId);
             res.status(200).json(users);
-        } catch(error) {
+        } catch (error) {
             console.log('Error in getting users for sidebar', error);
             res.status(500).json({
                 error: 'Internal server error'
@@ -49,13 +49,7 @@ class UsersController {
             const result = validationResult(req);
 
             if (result.isEmpty()) {
-                const { fullName, username, gender, password, confirmPassword } = req.body;
-            
-                if (password !== confirmPassword) {
-                    res.status(400).json({
-                        error: "Passwords do not match"
-                    });
-                }
+                const { fullName, username, gender, password } = req.body;
 
                 const saltRounds = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -75,8 +69,7 @@ class UsersController {
                     error: result.array()
                 });
             }
-        } catch(error) {
-            console.log('Error in signup', error);
+        } catch (error) {
             res.status(500).json({
                 error: 'Internal server error'
             });
@@ -90,14 +83,16 @@ class UsersController {
             if (result.isEmpty()) {
                 const { username, password } = req.body;
                 const user = await UsersService.findUserByUsername(username);
-    
+
                 const validate = await bcrypt.compare(password, user.password);
-                
+
                 if (!validate) {
-                    res.status(403).send('Wrong password');
+                    res.status(403).json({
+                        error: 'Wrong password'
+                    });
                 } else {
                     generateTokenSetCookies(user._id, res);
-    
+
                     res.status(200).json(user);
                 }
             } else {
@@ -105,7 +100,7 @@ class UsersController {
                     error: result.array()
                 });
             }
-        } catch(error) {
+        } catch (error) {
             console.log('Error in login', error);
             res.status(500).json({
                 error: 'Internal server error'
@@ -120,7 +115,7 @@ class UsersController {
             res.status(200).json({ message: 'Logged out successfully' });
         } catch (error) {
             console.log('Error in logout', error.message);
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'Internal server error'
             });
         }

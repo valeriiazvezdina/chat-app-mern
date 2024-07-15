@@ -1,6 +1,6 @@
-export default function SidebarIcon({ icon, text = 'tooltip' }) {
+export default function SidebarIcon({ icon, text = 'tooltip', onClick }) {
     return (
-        <div className="sidebar-icon group">
+        <div className="sidebar-icon group" onClick={onClick}>
             {icon}
             <span className="sidebar-tooltip group-hover:scale-100">
                 {text}

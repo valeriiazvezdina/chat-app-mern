@@ -5,6 +5,8 @@ const findUserByUsername = require('../utils/findUserByUsername');
 const authenticateToken = require('../utils/authenticate');
 const router = express.Router();
 
+let password;
+
 const validationBodySignup = [
     body('fullName')
         .notEmpty()
@@ -23,13 +25,23 @@ const validationBodySignup = [
         .custom(async username => {
             const isExisting = await findUserByUsername(username);
             if (isExisting) throw new Error('User with such username already exists');
-        }),
+        })
+        .bail(),
+    body('email')
+        .notEmpty()
+        .withMessage('Email must be provided')
+        .bail()
+        .isEmail()
+        .withMessage('Email must be correct')
+        .bail(),
     body('password')
         .notEmpty()
         .withMessage('Password must be provided')
         .bail()
         .isString()
         .withMessage('Password must be a string')
+        .bail()
+        .custom(async enteredPassword => password = enteredPassword)
         .bail(),
     body('confirmPassword')
         .notEmpty()
@@ -37,14 +49,15 @@ const validationBodySignup = [
         .bail()
         .isString()
         .withMessage('Confirmation of password must be a string')
+        .bail()
+        .custom(async confirmPassword => {
+            if (confirmPassword !== password) throw new Error(`Passwords do not match`);
+        })
         .bail(),
     body('gender')
         .notEmpty()
         .withMessage('Gender must be provided')
-        .bail()
-        .isIn(['male', 'female', 'other'])
-        .withMessage('Gender must be male, female, or other')
-        .bail()
+        .bail(),
 ];
 
 const validationBodyLogin = [
