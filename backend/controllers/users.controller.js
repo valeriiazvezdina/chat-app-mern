@@ -49,13 +49,7 @@ class UsersController {
             const result = validationResult(req);
 
             if (result.isEmpty()) {
-                const { fullName, username, gender, password, confirmPassword } = req.body;
-
-                if (password !== confirmPassword) {
-                    res.status(400).json({
-                        error: `Passwords don't match`
-                    });
-                }
+                const { fullName, username, gender, password } = req.body;
 
                 const saltRounds = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -93,7 +87,9 @@ class UsersController {
                 const validate = await bcrypt.compare(password, user.password);
 
                 if (!validate) {
-                    res.status(403).send('Wrong password');
+                    res.status(403).json({
+                        error: 'Wrong password'
+                    });
                 } else {
                     generateTokenSetCookies(user._id, res);
 

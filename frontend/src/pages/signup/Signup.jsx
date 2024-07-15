@@ -164,7 +164,11 @@ export default function Signup() {
                     </div>
 
                     <button className="btn w-full mt-3 bg-primary text-white">
-                        Submit
+                        {loading ? (
+                            <span className="loading loading-spinner"></span>
+                        ) : (
+                            'Submit'
+                        )}
                     </button>
                 </form>
             </div>

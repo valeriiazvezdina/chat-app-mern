@@ -51,7 +51,7 @@ const validationBodySignup = [
         .withMessage('Confirmation of password must be a string')
         .bail()
         .custom(async confirmPassword => {
-            if (confirmPassword !== password) throw new Error(`Passwords don't match`);
+            if (confirmPassword !== password) throw new Error(`Passwords do not match`);
         })
         .bail(),
     body('gender')

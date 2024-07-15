@@ -1,22 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-// import useLogin from '../../hooks/useLogin.js';
+import useLogin from '../../hooks/useLogin.js';
 
 export default function Login() {
-    // const [input, setInput] = useState({
-    //     fullName: '',
-    //     username: '',
-    //     email: '',
-    //     password: '',
-    //     confirmPassword: '',
-    //     gender: '',
-    // });
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    // const { loading, login } = useLogin();
+    const { loading, login } = useLogin();
 
     const handleSubmit = async (e) => {
-        //     e.preventDefault();
-        //     await login(input);
+        e.preventDefault();
+        await login(username, password);
     };
 
     return (
@@ -39,6 +33,8 @@ export default function Login() {
                                 type="text"
                                 className="grow"
                                 placeholder="Email"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </label>
                         <label className="input input-bordered flex items-center gap-2 mt-3">
@@ -58,6 +54,8 @@ export default function Login() {
                                 type="password"
                                 className="grow"
                                 placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </label>
                     </div>
@@ -73,7 +71,11 @@ export default function Login() {
                     </a> */}
                     </div>
                     <button className="btn w-full mt-3 bg-primary text-white">
-                        Submit
+                        {loading ? (
+                            <span className="loading loading-spinner"></span>
+                        ) : (
+                            'Submit'
+                        )}
                     </button>
                 </form>
             </div>
