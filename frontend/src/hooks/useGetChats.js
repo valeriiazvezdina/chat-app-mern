@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 import { API_ROUTE, USERS_ROUTE } from '../utils/STRINGS';
+import useLogout from "./useLogout";
 
 export default function useGetChats() {
     const [loading, setLoading] = useState(false);
@@ -18,6 +19,8 @@ export default function useGetChats() {
                 if (response.ok) {
                     setChats(data);
                 } else {
+                    // response.('/login');
+                    useLogout();
                     throw new Error(data.error);
                 }
 
