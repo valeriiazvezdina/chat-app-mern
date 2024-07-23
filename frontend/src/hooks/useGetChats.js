@@ -16,14 +16,13 @@ export default function useGetChats() {
 
             try {
                 const response = await fetch(`/${API_ROUTE}/${USERS_ROUTE}/`);
+                console.log(response)
 
                 const data = await response.json();
 
                 if (response.ok) {
                     setChats(data);
                 }
-
-                console.log(response)
 
                 if (response.status === 403) {
                     logout();

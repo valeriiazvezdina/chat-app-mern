@@ -2,8 +2,7 @@ const express = require('express');
 const routes = require('./routes/index');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-
-const app = express();
+const { app } = require('./socket/socket');
 
 app.use(express.json());
 app.use(cookieParser());
