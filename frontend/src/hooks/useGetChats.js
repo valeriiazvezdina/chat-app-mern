@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 import { API_ROUTE, USERS_ROUTE } from '../utils/STRINGS';
+import { useNavigate } from 'react-router-dom';
 import useLogout from "./useLogout";
 
 export default function useGetChats() {
     const [loading, setLoading] = useState(false);
     const [chats, setChats] = useState([]);
+    const { logout } = useLogout();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getChats = async () => {
@@ -18,10 +21,13 @@ export default function useGetChats() {
 
                 if (response.ok) {
                     setChats(data);
-                } else {
-                    // response.('/login');
-                    useLogout();
-                    throw new Error(data.error);
+                }
+
+                console.log(response)
+
+                if (response.status === 403) {
+                    logout();
+                    navigate('/login');
                 }
 
             } catch (err) {
