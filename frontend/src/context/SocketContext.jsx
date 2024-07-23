@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
-import { useAuthContext } from './AuthContext';
+import { useAuthContext } from '../hooks/useAuthContext';
+import io from 'socket.io-client';
 
 export const SocketContext = createContext();
 
@@ -12,6 +13,10 @@ export function SocketContextProvider({ children }) {
         if (authUser) {
             const socket = io('http://localhost:4000');
 
+            socket.on('connect_error', (err) => {
+                console.log(`connect_error due to ${err.message}`);
+            });
+
             setSocket(socket);
 
             return () => socket.close();
@@ -19,14 +24,13 @@ export function SocketContextProvider({ children }) {
             if (socket) {
                 socket.close();
                 setSocket(null);
-            } else {
             }
         }
     }, [authUser]);
 
     return (
-        <SocketContextProvider value={{ socket, onlineUsers }}>
+        <SocketContext.Provider value={{ socket, onlineUsers }}>
             {children}
-        </SocketContextProvider>
+        </SocketContext.Provider>
     );
 }
