@@ -49,7 +49,7 @@ class UsersController {
             const result = validationResult(req);
 
             if (result.isEmpty()) {
-                const { fullName, username, gender, password } = req.body;
+                const { fullName, username, email, gender, password } = req.body;
 
                 const saltRounds = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -57,6 +57,7 @@ class UsersController {
                 const newUser = await UsersService.createUser({
                     fullName,
                     username,
+                    email: email,
                     password: hashedPassword,
                     gender,
                     profilePicture: selectProfilePicture(gender, username)

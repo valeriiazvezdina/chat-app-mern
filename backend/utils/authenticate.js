@@ -5,18 +5,22 @@ const authenticateToken = (req, res, next) => {
         const token = req.cookies.jwt;
 
         if (!token) {
-            res.status(401).send('Token must be provided');
+            res.status(401).json({
+                error: 'Token must be provided'
+            });
         } else {
             jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
                 if (err) {
-                    res.status(403).send('access error');
+                    res.status(403).json({
+                        error: 'Access error'
+                    });
                 } else {
                     req.userId = user.userId;
                     next();
                 }
             })
         }
-    } catch(error) {
+    } catch (error) {
         console.log('Error in authenticating user', error);
         res.status(500).json({
             error: 'Internal server error'

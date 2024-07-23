@@ -17,6 +17,7 @@ export default function useLogout() {
                     'Content-Type': 'application/json'
                 }
             });
+
             const data = await response.json();
 
             if (response.ok) {

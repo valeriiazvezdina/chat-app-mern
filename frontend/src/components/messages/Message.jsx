@@ -1,17 +1,31 @@
-export default function Message() {
+import useChat from '../../zustand/useChat';
+import { extractTime } from '../../utils/extractTime';
+import { useAuthContext } from '../../hooks/useAuthContext';
+
+export default function Message({ message }) {
+    const { selectedChat } = useChat();
+    const { authUser } = useAuthContext();
+
+    const fromMe = message.senderId === authUser._id;
+    const chatClassName = fromMe ? 'chat-end' : 'chat-start';
+    const formattedTime = extractTime(message.createdAt);
+    const profilePic = fromMe
+        ? authUser.profilePicture
+        : selectedChat.profilePicture;
+    const bgColor = fromMe ? 'bg-accent' : 'bg-primary';
+
     return (
-        <div className="chat chat-start">
+        <div className={`chat ${chatClassName}`}>
             <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
-                    <img src="https://avatar.iran.liara.run/public" />
+                    <img src={profilePic} />
                 </div>
             </div>
-            <div className="chat-bubble bg-primary text-white">
-                You were the Chosen One!
+            <div className={`chat-bubble text-white ${bgColor}`}>
+                {message.message}
             </div>
             <div className="chat-footer opacity-50">
-                Delivered
-                <time className="text-xs opacity-50"> 12:45</time>
+                <time className="text-xs opacity-50">{formattedTime}</time>
             </div>
         </div>
     );

@@ -1,14 +1,19 @@
-import ThemeToggle from '../theme-toggle/ThemeToggle';
 import MessageInput from './MessageInput';
 import Messages from './Messages';
 import NoChatSelected from './NoChatSelected';
+import useChat from '../../zustand/useChat';
+import { useEffect } from 'react';
 
 export default function MessagesContainer() {
-    const noChatSelected = true;
+    const { selectedChat, setSelectedChat } = useChat();
+
+    useEffect(() => {
+        return () => setSelectedChat(null);
+    }, [setSelectedChat]);
 
     return (
         <div className="flex flex-col h-screen w-full">
-            {noChatSelected ? (
+            {!selectedChat ? (
                 <NoChatSelected />
             ) : (
                 <>
@@ -16,7 +21,7 @@ export default function MessagesContainer() {
                         <div>
                             <span className="label-text">To: </span>
                             <span className="text-primary font-bold">
-                                Name Username
+                                {selectedChat.fullName}
                             </span>
                         </div>
                     </div>
