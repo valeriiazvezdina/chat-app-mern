@@ -11,13 +11,21 @@ export function SocketContextProvider({ children }) {
 
     useEffect(() => {
         if (authUser) {
-            const socket = io('http://localhost:4000');
+            const socket = io('http://localhost:4000', {
+                query: {
+                    userId: authUser._id,
+                },
+            });
 
             socket.on('connect_error', (err) => {
                 console.log(`connect_error due to ${err.message}`);
             });
 
             setSocket(socket);
+
+            socket.on('getOnlineUsers', (users) => {
+                setOnlineUsers(users);
+            });
 
             return () => socket.close();
         } else {

@@ -13,11 +13,24 @@ const io = new Server(server, {
     }
 });
 
+const usersMap = {};
+
+const getReceiverSocketId = (receiverId) => usersMap[receiverId];
+
 io.on('connection', (socket) => {
     console.log('user connected', socket.id);
 
+    const userId = socket.handshake.query.userId;
+
+    if (userId !== 'undefined') usersMap[userId] = socket.id;
+
+    io.emit('getOnlineUsers', Object.keys(usersMap));
+
     socket.on('disconnect', () => {
         console.log('user disconnected', socket.id);
+
+        delete usersMap[userId];
+        io.emit('getOnlineUsers', Object.keys(usersMap));
     });
 });
 
@@ -26,5 +39,5 @@ io.on('connect_error', (err) => {
 });
 
 module.exports = {
-    app, io, server
+    app, io, server, getReceiverSocketId
 };
