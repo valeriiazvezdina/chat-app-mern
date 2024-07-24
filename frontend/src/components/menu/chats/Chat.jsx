@@ -10,9 +10,9 @@ export default function Chat({ chat }) {
     const isOnline = onlineUsers.includes(chat._id);
 
     return (
-        <>
+        <li>
             <div
-                className={`flex items-center align-center hover:bg-gray-300 cursor-pointer min-h-25 rounded-lg p-2 py-1 mx-1 my-1 ${isSelected ? 'bg-gray-300' : ''}`}
+                className={`flex items-center align-center  cursor-pointer min-h-25 rounded-lg p-2 py-1 mx-1 my-1 `}
                 onClick={() => setSelectedChat(chat)}
             >
                 <div className={`avatar ${isOnline ? 'online' : 'offline'}`}>
@@ -24,6 +24,6 @@ export default function Chat({ chat }) {
                     <p className="font-bold">{chat.fullName}</p>
                 </div>
             </div>
-        </>
+        </li>
     );
 }

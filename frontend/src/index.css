@@ -5,10 +5,10 @@
 @layer components {
 
     .sidebar-icon {
-        @apply relative flex items-center justify-center h-14 w-14 my-6 mx-auto shadow-lg bg-white hover:bg-primary hover:text-white cursor-pointer rounded-3xl hover:rounded-xl transition-all;
+        @apply relative flex items-center justify-center h-14 w-14 my-6 mx-auto shadow-lg  cursor-pointer rounded-3xl hover:rounded-xl transition-shadow;
     }
 
     .sidebar-tooltip {
-        @apply absolute w-auto p-2 m-1 min-w-max top-14 rounded-md shadow-md text-white bg-gray-800 text-xs font-bold transition-all duration-100 scale-0 origin-left; 
+        @apply absolute w-auto p-2 m-1 min-w-max top-14 rounded-md shadow-md text-xs font-bold transition-all duration-100 scale-0 origin-center; 
     }
 }

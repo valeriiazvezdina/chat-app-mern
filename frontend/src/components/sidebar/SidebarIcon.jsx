@@ -1,4 +1,4 @@
-export default function SidebarIcon({ icon, text = 'tooltip', onClick }) {
+export default function SidebarIcon({ icon, text, onClick }) {
     return (
         <div className="sidebar-icon group" onClick={onClick}>
             {icon}

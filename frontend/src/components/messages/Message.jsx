@@ -12,7 +12,6 @@ export default function Message({ message }) {
     const profilePic = fromMe
         ? authUser.profilePicture
         : selectedChat.profilePicture;
-    const bgColor = fromMe ? 'bg-accent' : 'bg-primary';
 
     return (
         <div className={`chat ${chatClassName}`}>
@@ -21,9 +20,7 @@ export default function Message({ message }) {
                     <img src={profilePic} />
                 </div>
             </div>
-            <div className={`chat-bubble text-white ${bgColor}`}>
-                {message.message}
-            </div>
+            <div className={`chat-bubble`}>{message.message}</div>
             <div className="chat-footer opacity-50">
                 <time className="text-xs opacity-50">{formattedTime}</time>
             </div>
